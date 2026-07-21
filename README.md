@@ -49,7 +49,10 @@ Five core tables: `users`, `check_ins`, `evidence`, `momentum_snapshots`, `weekl
 ## Roadmap
 
 - [x] Project setup, entity design, database connectivity
-- [ ] Auth (JWT) + core CRUD APIs
+- [x] All entities (User, CheckIn, Evidence, MomentumSnapshot) + repositories
+- [x] Auth DTOs + password encoder configuration
+- [ ] JWT authentication + register/login endpoints
+- [ ] Core CRUD APIs (check-ins, evidence)
 - [ ] Momentum scoring engine + evidence verification
 - [ ] AI weekly recommendation engine
 - [ ] React frontend + deployment
