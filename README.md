@@ -23,7 +23,7 @@ Most "career tracker" apps are glorified checklists — check a box, feel good, 
 **Deployment (planned):** Render (backend), Vercel (frontend)
 
 ## Architecture
-
+```
 React Frontend
 │
 ▼
@@ -35,6 +35,7 @@ Spring Boot Backend
 ├── MySQL (Aiven)
 ├── Cloudinary (evidence storage)
 └── AI Layer (LangChain4j + Groq)
+```
 
 ## Entity design
 
@@ -51,11 +52,11 @@ Five core tables: `users`, `check_ins`, `evidence`, `momentum_snapshots`, `weekl
 - [x] Project setup, entity design, database connectivity
 - [x] All entities (User, CheckIn, Evidence, MomentumSnapshot) + repositories
 - [x] Auth DTOs + password encoder configuration
-- [ ] JWT authentication + register/login endpoints
+- [x] JWT token generation utility
+- [ ] JWT authentication filter + register/login endpoints
 - [ ] Core CRUD APIs (check-ins, evidence)
 - [ ] Momentum scoring engine + evidence verification
 - [ ] AI weekly recommendation engine
 - [ ] React frontend + deployment
-
 ---
 *Built by Sulekha Thakur as a demonstration of backend architecture, AI integration, and product engineering — not a course project.*
