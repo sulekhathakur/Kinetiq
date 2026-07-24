@@ -52,11 +52,12 @@ Five core tables: `users`, `check_ins`, `evidence`, `momentum_snapshots`, `weekl
 - [x] Project setup, entity design, database connectivity
 - [x] All entities (User, CheckIn, Evidence, MomentumSnapshot) + repositories
 - [x] Auth DTOs + password encoder configuration
-- [x] JWT token generation utility
-- [ ] JWT authentication filter + register/login endpoints
+- [x] JWT authentication (token generation, register/login endpoints)
+- [x] Global exception handling for validation and auth errors
 - [ ] Core CRUD APIs (check-ins, evidence)
 - [ ] Momentum scoring engine + evidence verification
 - [ ] AI weekly recommendation engine
 - [ ] React frontend + deployment
 ---
+
 *Built by Sulekha Thakur as a demonstration of backend architecture, AI integration, and product engineering — not a course project.*
