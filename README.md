@@ -44,8 +44,17 @@ Five core tables: `users`, `check_ins`, `evidence`, `momentum_snapshots`, `weekl
 ## Local setup
 
 1. Clone the repo
-2. Create `src/main/resources/application-local.properties` with your own MySQL connection details (see `application.properties` for the required keys — this file is gitignored and never committed)
-3. Run `mvn spring-boot:run`
+2. Create `src/main/resources/application-local.properties` with the following keys, using your own MySQL and JWT values:
+```properties
+   spring.datasource.url=jdbc:mysql://<host>:<port>/<database>?ssl-mode=REQUIRED
+   spring.datasource.username=<your-db-username>
+   spring.datasource.password=<your-db-password>
+   spring.jpa.hibernate.ddl-auto=update
+   jwt.secret=<your-random-secret-key>
+   jwt.expiration=86400000
+```
+   This file is gitignored and never committed.
+3. Run `mvn spring-boot:run "-Dspring-boot.run.profiles=local"` (quotes required on Windows/PowerShell — the local profile is activated explicitly since production config comes from environment variables instead)
 
 ## Roadmap
 
