@@ -18,13 +18,13 @@ Most "career tracker" apps are glorified checklists — check a box, feel good, 
 
 It turns daily career-building actions (DSA practice, project work, learning) into a measurable, evidence-verified progress score — combining a custom time-decay scoring algorithm with AI-generated weekly recommendations, instead of just tracking a to-do list.
 
-**Status:** Backend in active development. Auth, entity layer, and deployment are live and verified; core check-in/scoring APIs and the AI recommendation layer are in progress.
+**Status:** Backend in active development. Auth, entity layer, deployment, and the first authenticated feature (check-in submission) are live and verified end-to-end. Evidence submission, the momentum engine, and the AI recommendation layer are in progress.
 
 ## Core design decisions
 
 - **Momentum score, not a streak counter.** Daily progress is calculated with a weighted formula that includes exponential decay — consistent effort compounds, missed days meaningfully reduce momentum, and every day's score is preserved as an immutable snapshot (not overwritten), enabling a true progress-over-time view.
 - **Evidence verification, not self-reported trust.** Check-ins tied to a GitHub link will be validated against the GitHub API (commit exists, falls in the check-in window, is a non-trivial change) rather than blindly trusting a pasted URL.
-- **Stateless JWT authentication.** No server-side sessions — every request is authenticated independently via a signed token, verified against a secret key rather than a database lookup.
+- **Stateless JWT authentication.** No server-side sessions — every request is authenticated independently via a signed token, verified against a secret key rather than a database lookup. A custom `OncePerRequestFilter` validates the token and populates Spring Security's context before any controller runs.
 - **Environment-based configuration.** Local development reads from a gitignored properties file; production (Render) reads the same configuration keys from environment variables. No secrets are ever committed to version control.
 - **AI recommendations will run asynchronously.** LLM calls (via LangChain4j + Groq) are designed to never block a request thread, with responses validated as structured JSON and fallback handling for malformed output.
 
@@ -33,7 +33,7 @@ It turns daily career-building actions (DSA practice, project work, learning) in
 | Layer | Technology |
 |---|---|
 | Backend | Java 17, Spring Boot, Spring Security, Spring Data JPA, Hibernate |
-| Auth | JWT (jjwt), BCrypt password hashing |
+| Auth | JWT (jjwt), custom authentication filter, BCrypt password hashing |
 | Database | MySQL (Aiven, cloud-hosted) |
 | AI *(planned)* | LangChain4j, Groq API |
 | Frontend *(planned)* | React, Vite, Tailwind CSS |
@@ -48,12 +48,12 @@ React Frontend (planned)
     REST APIs
         │
         ▼
-Spring Boot Backend  ──►  MySQL (Aiven)
-        │
-        └──►  AI Layer (LangChain4j + Groq)  [planned]
+JWT Auth Filter  ──►  Spring Boot Backend  ──►  MySQL (Aiven)
+                              │
+                              └──►  AI Layer (LangChain4j + Groq)  [planned]
 ```
 
-**Request flow:** Controller → Service → Repository → Database, with DTOs at the boundary so internal entities (and fields like password hashes) are never exposed over the wire.
+**Request flow:** Client → JWT filter (validates token, sets authenticated identity) → Controller → Service → Repository → Database, with DTOs at the boundary so internal entities (and fields like password hashes) are never exposed over the wire.
 
 ## Entity design
 
@@ -73,8 +73,9 @@ Five core tables model one continuous feedback loop: submit a check-in → attac
 |---|---|---|---|
 | `POST` | `/api/auth/register` | Create a new account, returns a JWT | No |
 | `POST` | `/api/auth/login` | Authenticate, returns a JWT | No |
+| `POST` | `/api/checkins` | Submit a daily check-in (type, description, date) | Yes (Bearer JWT) |
 
-More endpoints (check-ins, evidence, momentum) are in progress — see [Roadmap](#roadmap).
+More endpoints (evidence, momentum, weekly recommendations) are in progress — see [Roadmap](#roadmap).
 
 ## Local setup
 
@@ -101,7 +102,9 @@ More endpoints (check-ins, evidence, momentum) are in progress — see [Roadmap]
 - [x] All entities (`User`, `CheckIn`, `Evidence`, `MomentumSnapshot`) + repositories
 - [x] JWT authentication — register/login endpoints, password hashing, global exception handling
 - [x] Backend deployed to Render (Docker), verified live end-to-end
-- [ ] Check-in and evidence submission APIs
+- [x] JWT authentication filter validating protected routes
+- [x] Check-in submission endpoint (authenticated, verified end-to-end)
+- [ ] Evidence submission API
 - [ ] Momentum scoring engine with time-decay formula
 - [ ] Evidence verification via GitHub API
 - [ ] AI weekly recommendation engine (LangChain4j + Groq)
