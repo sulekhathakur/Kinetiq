@@ -69,13 +69,16 @@ Five core tables model one continuous feedback loop: submit a check-in → attac
 
 ## API endpoints
 
+## API endpoints
+
 | Method | Endpoint | Description | Auth required |
 |---|---|---|---|
 | `POST` | `/api/auth/register` | Create a new account, returns a JWT | No |
 | `POST` | `/api/auth/login` | Authenticate, returns a JWT | No |
 | `POST` | `/api/checkins` | Submit a daily check-in (type, description, date) | Yes (Bearer JWT) |
+| `POST` | `/api/evidence` | Attach evidence to a check-in (ownership-validated) | Yes (Bearer JWT) |
 
-More endpoints (evidence, momentum, weekly recommendations) are in progress — see [Roadmap](#roadmap).
+More endpoints (momentum, weekly recommendations) are in progress — see [Roadmap](#roadmap).
 
 ## Local setup
 
@@ -104,7 +107,7 @@ More endpoints (evidence, momentum, weekly recommendations) are in progress — 
 - [x] Backend deployed to Render (Docker), verified live end-to-end
 - [x] JWT authentication filter validating protected routes
 - [x] Check-in submission endpoint (authenticated, verified end-to-end)
-- [ ] Evidence submission API
+- [x] Evidence submission endpoint with ownership validation (verified end-to-end)
 - [ ] Momentum scoring engine with time-decay formula
 - [ ] Evidence verification via GitHub API
 - [ ] AI weekly recommendation engine (LangChain4j + Groq)
