@@ -13,10 +13,12 @@ public class CheckInService {
 
     private final CheckInRepository checkInRepository;
     private final UserRepository userRepository;
+    private final MomentumService momentumService;
 
-    public CheckInService(CheckInRepository checkInRepository, UserRepository userRepository) {
+    public CheckInService(CheckInRepository checkInRepository, UserRepository userRepository, MomentumService momentumService) {
         this.checkInRepository = checkInRepository;
         this.userRepository = userRepository;
+        this.momentumService = momentumService;
     }
 
     public CheckInResponseDTO submitCheckIn(String userEmail, CheckInRequestDTO request) {
@@ -30,6 +32,8 @@ public class CheckInService {
         checkIn.setCheckinDate(request.getCheckinDate());
 
         checkInRepository.save(checkIn);
+
+        momentumService.recomputeForDate(user, checkIn.getCheckinDate());
 
         return new CheckInResponseDTO(
                 checkIn.getId(),
