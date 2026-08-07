@@ -74,9 +74,8 @@ Five core tables model one continuous feedback loop: submit a check-in → attac
 | `POST` | `/api/auth/register` | Create a new account, returns a JWT | No |
 | `POST` | `/api/auth/login` | Authenticate, returns a JWT | No |
 | `POST` | `/api/checkins` | Submit a daily check-in (triggers momentum recompute) | Yes (Bearer JWT) |
-| `POST` | `/api/evidence` | Attach evidence to a check-in (ownership-validated) | Yes (Bearer JWT) |
-| `GET` | `/api/momentum/latest` | Retrieve the user's most recent momentum snapshot | Yes (Bearer JWT) |
-
+| `POST` | `/api/evidence` | Attach evidence to a check-in; GitHub commit links are automatically verified against the GitHub API | Yes (Bearer JWT) |
+| `GET` | `/api/momentum/latest` | Retrieve the user's most recent momentum snapshot | Yes (Bearer JWT) |   
 More endpoints (momentum, weekly recommendations) are in progress — see [Roadmap](#roadmap).
 
 ## Local setup
@@ -108,7 +107,7 @@ More endpoints (momentum, weekly recommendations) are in progress — see [Roadm
 - [x] Check-in submission endpoint (authenticated, verified end-to-end)
 - [x] Evidence submission endpoint with ownership validation (verified end-to-end)
 - [x] Momentum scoring engine with time-decay formula (unit tested, auto-recomputes on check-in, verified end-to-end)
-- [ ] Evidence verification via GitHub API
+- [x] Evidence verification via GitHub API (verified end-to-end, both match and mismatch cases)
 - [ ] AI weekly recommendation engine (LangChain4j + Groq)
 - [ ] React frontend + deployment
 
