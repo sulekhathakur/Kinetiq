@@ -9,10 +9,12 @@ import com.kinetiq.repository.CheckInRepository;
 import com.kinetiq.repository.MomentumSnapshotRepository;
 import com.kinetiq.repository.WeeklyRecommendationRepository;
 import dev.langchain4j.model.chat.ChatLanguageModel;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,7 +38,8 @@ public class WeeklyRecommendationService {
         this.chatLanguageModel = chatLanguageModel;
     }
 
-    public WeeklyRecommendation generateRecommendation(User user) {
+    @Async
+    public CompletableFuture<WeeklyRecommendation> generateRecommendation(User user) {
         LocalDate today = LocalDate.now();
         LocalDate weekAgo = today.minusDays(7);
 
@@ -58,7 +61,7 @@ public class WeeklyRecommendationService {
         recommendation.setWeekStartDate(weekAgo);
         recommendation.setContentJson(validatedJson);
 
-        return weeklyRecommendationRepository.save(recommendation);
+        return CompletableFuture.completedFuture(weeklyRecommendationRepository.save(recommendation));
     }
 
     private String buildPrompt(List<CheckIn> checkIns, float currentMomentum) {
