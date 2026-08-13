@@ -35,7 +35,7 @@ It turns daily career-building actions (DSA practice, project work, learning) in
 | Backend | Java 17, Spring Boot, Spring Security, Spring Data JPA, Hibernate |
 | Auth | JWT (jjwt), custom authentication filter, BCrypt password hashing |
 | Database | MySQL (Aiven, cloud-hosted) |
-| AI *(planned)* | LangChain4j, Groq API |
+| AI *(planned)* | LangChain4j,  Google Gemini API |
 | Frontend *(planned)* | React, Vite, Tailwind CSS |
 | Deployment | Render (backend, Docker), Aiven (database), Vercel (frontend, planned) |
 
@@ -108,7 +108,7 @@ More endpoints (momentum, weekly recommendations) are in progress — see [Roadm
 - [x] Evidence submission endpoint with ownership validation (verified end-to-end)
 - [x] Momentum scoring engine with time-decay formula (unit tested, auto-recomputes on check-in, verified end-to-end)
 - [x] Evidence verification via GitHub API (verified end-to-end, both match and mismatch cases)
-- [ ] AI weekly recommendation engine (LangChain4j + Groq)
+- [x] AI weekly recommendation engine (LangChain4j + Gemini, async, structured JSON validation with fallback, verified end-to-end)
 - [ ] React frontend + deployment
 
 ## Author
