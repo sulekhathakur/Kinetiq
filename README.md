@@ -75,8 +75,11 @@ Five core tables model one continuous feedback loop: submit a check-in → attac
 | `POST` | `/api/auth/login` | Authenticate, returns a JWT | No |
 | `POST` | `/api/checkins` | Submit a daily check-in (triggers momentum recompute) | Yes (Bearer JWT) |
 | `POST` | `/api/evidence` | Attach evidence to a check-in; GitHub commit links are automatically verified against the GitHub API | Yes (Bearer JWT) |
-| `GET` | `/api/momentum/latest` | Retrieve the user's most recent momentum snapshot | Yes (Bearer JWT) |   
-More endpoints (momentum, weekly recommendations) are in progress — see [Roadmap](#roadmap).
+| `GET` | `/api/momentum/latest` | Retrieve the user's most recent momentum snapshot | Yes (Bearer JWT) |
+| `GET` | `/api/recommendations/generate` | Generate a new AI weekly recommendation (async Gemini call) | Yes (Bearer JWT) |
+| `GET` | `/api/recommendations/latest` | Retrieve the most recently saved recommendation | Yes (Bearer JWT) |
+
+All backend endpoints are implemented and verified end-to-end. The React frontend is in progress — see [Roadmap](#roadmap).
 
 ## Local setup
 
