@@ -3,6 +3,7 @@ package com.kinetiq.controller;
 import com.kinetiq.entity.User;
 import com.kinetiq.entity.WeeklyRecommendation;
 import com.kinetiq.repository.UserRepository;
+import com.kinetiq.repository.WeeklyRecommendationRepository;
 import com.kinetiq.service.WeeklyRecommendationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,10 +18,16 @@ import java.util.concurrent.ExecutionException;
 public class WeeklyRecommendationController {
 
     private final WeeklyRecommendationService weeklyRecommendationService;
+    private final WeeklyRecommendationRepository weeklyRecommendationRepository;
     private final UserRepository userRepository;
 
-    public WeeklyRecommendationController(WeeklyRecommendationService weeklyRecommendationService, UserRepository userRepository) {
+    public WeeklyRecommendationController(
+            WeeklyRecommendationService weeklyRecommendationService,
+            WeeklyRecommendationRepository weeklyRecommendationRepository,
+            UserRepository userRepository
+    ) {
         this.weeklyRecommendationService = weeklyRecommendationService;
+        this.weeklyRecommendationRepository = weeklyRecommendationRepository;
         this.userRepository = userRepository;
     }
 
@@ -32,6 +39,19 @@ public class WeeklyRecommendationController {
 
         CompletableFuture<WeeklyRecommendation> future = weeklyRecommendationService.generateRecommendation(user);
         WeeklyRecommendation recommendation = future.get();
+
+        return recommendation.getContentJson();
+    }
+
+    @GetMapping("/latest")
+    public String getLatest(Authentication authentication) {
+        String userEmail = authentication.getName();
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        WeeklyRecommendation recommendation = weeklyRecommendationRepository
+                .findTopByUserOrderByWeekStartDateDesc(user)
+                .orElseThrow(() -> new RuntimeException("No recommendation generated yet"));
 
         return recommendation.getContentJson();
     }
