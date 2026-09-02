@@ -10,7 +10,8 @@
 
 **Live app:** [kinetiq-frontend.vercel.app](https://kinetiq-frontend.vercel.app)
 **Live backend:** [kinetiq-backend-qq54.onrender.com](https://kinetiq-backend-qq54.onrender.com)
-*Both are hosted on free-tier infrastructure — the backend may take up to a minute to respond after a period of inactivity while it spins back up.*
+
+*This is an API server, not a webpage — visiting the root URL directly will correctly return a 403, since every route requires authentication except `/api/auth/*`. Use the live app link above to interact with it through the UI. Both are hosted on free-tier infrastructure, so the backend may take up to a minute to respond after a period of inactivity while it spins back up.*
 
 ---
 
@@ -43,17 +44,17 @@ It turns daily career-building actions (DSA practice, project work, learning) in
 | Deployment | Render (backend, Docker), Aiven (database), Vercel (frontend) |
 
 ## Architecture
-
 ```
 React Frontend (Vercel)
-        │
-        ▼
-    REST APIs
-        │
-        ▼
-JWT Auth Filter  ──►  Spring Boot Backend (Render, Docker)  ──►  MySQL (Aiven)
-                              │
-                              └──►  AI Layer (LangChain4j + Groq)  [planned]
+│
+▼
+REST APIs
+│
+▼
+JWT Auth Filter ──► Spring Boot Backend (Render, Docker) ──► MySQL (Aiven)
+│
+└──► AI Layer (LangChain4j + Gemini)
+
 ```
 
 
