@@ -99,6 +99,7 @@ Five core tables model one continuous feedback loop: submit a check-in → attac
    gemini.model=gemini-3.5-flash-lite
 ```
    This file is gitignored and never committed.
+   
 3. Run:
 ```bash
    mvn spring-boot:run "-Dspring-boot.run.profiles=local"
