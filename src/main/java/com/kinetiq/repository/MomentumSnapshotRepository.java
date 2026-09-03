@@ -5,6 +5,7 @@ import com.kinetiq.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,4 +14,6 @@ public interface MomentumSnapshotRepository extends JpaRepository<MomentumSnapsh
     Optional<MomentumSnapshot> findTopByUserOrderBySnapshotDateDesc(User user);
 
     Optional<MomentumSnapshot> findByUserAndSnapshotDate(User user, LocalDate snapshotDate);
+
+    List<MomentumSnapshot> findByUserOrderBySnapshotDateAsc(User user);
 }

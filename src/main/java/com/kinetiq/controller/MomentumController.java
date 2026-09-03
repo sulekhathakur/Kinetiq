@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("/api/momentum")
 public class MomentumController {
@@ -39,5 +42,22 @@ public class MomentumController {
                 snapshot.getMomentumScore(),
                 snapshot.getDecayFactor()
         );
+    }
+
+    @GetMapping("/history")
+    public List<MomentumSnapshotResponseDTO> getHistory(Authentication authentication) {
+        String userEmail = authentication.getName();
+
+        User user = userRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return momentumSnapshotRepository.findByUserOrderBySnapshotDateAsc(user).stream()
+                .map(s -> new MomentumSnapshotResponseDTO(
+                        s.getSnapshotDate(),
+                        s.getDailyScore(),
+                        s.getMomentumScore(),
+                        s.getDecayFactor()
+                ))
+                .collect(Collectors.toList());
     }
 }
